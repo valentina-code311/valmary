@@ -1,0 +1,76 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Contenido público del sitio: lectura abierta, escritura solo admin
+    match /heroSlides/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /storyMilestones/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /ceremonySteps/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /pages/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /photoCategories/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /playlistTracks/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Deseos: lectura pública, creación abierta (moderada), gestión solo admin
+    match /wishes/{doc} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // Fotos de invitados: leer/crear autenticado, gestionar solo admin
+    match /photoUploads/{doc} {
+      allow read, create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    // Retos: lectura autenticada, escritura solo admin
+    match /challenges/{doc} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+    match /challengeSubmissions/{doc} {
+      allow read, create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    // Usuarios: cada uno el suyo; admin todo
+    match /users/{userId} {
+      allow read, update: if isSignedIn() && request.auth.uid == userId;
+      allow read, write: if isAdmin();
+    }
+
+    // Configuración de la boda: lectura pública, escritura solo admin
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

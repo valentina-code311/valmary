@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function isUnderLimit() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // Assets públicos del sitio (hero, historia, ceremonia): lectura abierta
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // solo backend (Admin SDK)
+    }
+
+    // Subidas de invitados (galería y retos): autenticado, solo imágenes <10MB
+    match /uploads/{userId}/{allPaths=**} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn()
+        && request.auth.uid == userId
+        && isImage()
+        && isUnderLimit();
+    }
+  }
+}
