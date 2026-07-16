@@ -1,0 +1,76 @@
+spec:
+  inputs:
+    target:
+      description: "What to affect: back, front, or all"
+      default: "all"
+      options:
+        - back
+        - front
+        - all
+      type: string
+---
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        paths:
+        - app/**
+        - .gitlab-ci.yml
+
+stages:
+  - setup
+  - deploy
+
+.default: &default
+  image: ubuntu:latest
+  interruptible: true
+
+variables:
+  CONN_VARIABLES: |
+    [
+      {"path":"gcp.json", "var":"GCP_CREDENTIALS_JSON"},
+      {"path":".env", "var":"ENV_FILE"},
+      {"path":"backend.env", "var":"BACKEND_ENV_FILE"},
+      {"path":"frontend.env", "var":"FRONTEND_ENV_FILE"}
+    ]
+
+setup-env:
+  stage: setup
+  before_script:
+    - sh scripts/startup.sh -t jq
+  script: |
+    set -euo pipefail
+    if [[ -z "${CONN_VARIABLES:-}" ]]; then
+      echo "CONN_VARIABLES no está definida; nada que generar."
+      exit 0
+    fi
+    echo "Creando archivos declarados en CONN_VARIABLES"
+    echo "$CONN_VARIABLES" \
+      | jq -r '.[] | "\(.path):\(.var)"' \
+      | while IFS=: read -r file varname; do
+          if [[ -z "${!varname:-}" ]]; then
+            echo "La variable $varname no está definida"; exit 1
+          fi
+          mkdir -p conn/
+          printf '%s' "${!varname}" > conn/"$file"
+          echo "   $file <- $varname"
+        done
+  artifacts:
+    paths:
+      - conn/
+    expire_in: 3 mins
+
+deploy-gcp:
+  extends: [.default]
+  stage: deploy
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - sh scripts/startup.sh -t docker -t gcloud
+  script: |
+    gcloud auth activate-service-account --key-file="./conn/gcp.json"
+    sh scripts/deploy.sh "$[[ inputs.target ]]"
