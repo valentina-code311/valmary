@@ -1,7 +1,5 @@
-'use client'
-
-import Link from 'next/link'
-import { OrnamentalDivider } from './ornamental-divider'
+import { Link } from 'react-router-dom'
+import { OrnamentalDivider } from '@/shared/ui/ornamental-divider'
 import { Heart } from 'lucide-react'
 
 export function Footer() {
@@ -26,25 +24,25 @@ export function Footer() {
           {/* Navigation */}
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link
-              href="/"
+              to="/"
               className="text-sm text-muted-foreground hover:text-gold transition-colors"
             >
               Home
             </Link>
             <Link
-              href="/our_love"
+              to="/our_love"
               className="text-sm text-muted-foreground hover:text-gold transition-colors"
             >
               Our Love
             </Link>
             <Link
-              href="/ceremony"
+              to="/ceremony"
               className="text-sm text-muted-foreground hover:text-gold transition-colors"
             >
               Ceremony
             </Link>
             <Link
-              href="/best_wishes"
+              to="/best_wishes"
               className="text-sm text-muted-foreground hover:text-gold transition-colors"
             >
               Best Wishes

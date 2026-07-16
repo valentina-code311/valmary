@@ -1,20 +1,16 @@
-'use client'
-
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useRequireAuth, useAuth } from '@/lib/auth/auth-context'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useRequireAuth, useAuth } from '@/shared/providers/auth-context'
+import { cn } from '@/shared/utils/utils'
+import { Button } from '@/shared/ui/button'
+import { ScrollArea } from '@/shared/ui/scroll-area'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/shared/ui/dropdown-menu'
 import {
   LayoutDashboard,
   Image as ImageIcon,
@@ -46,25 +42,21 @@ const navItems = [
   { href: '/admin/playlist', label: 'Playlist', icon: Music },
 ]
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const router = useRouter()
-  const pathname = usePathname()
+export default function AdminLayout() {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
   const { user, logout } = useAuth()
   const { isLoading, isAuthorized } = useRequireAuth({ adminOnly: true })
 
   useEffect(() => {
     if (!isLoading && !isAuthorized) {
-      router.push('/auth')
+      navigate('/auth')
     }
-  }, [isLoading, isAuthorized, router])
+  }, [isLoading, isAuthorized, navigate])
 
   const handleLogout = async () => {
     await logout()
-    router.push('/')
+    navigate('/')
   }
 
   if (isLoading) {
@@ -85,7 +77,7 @@ export default function AdminLayout({
       <aside className="w-64 border-r border-gold/10 bg-card/50 hidden md:flex flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-gold/10">
-          <Link href="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <span className="font-script text-3xl text-gold">E & S</span>
           </Link>
           <p className="text-xs text-muted-foreground mt-1">Admin Panel</p>
@@ -101,7 +93,7 @@ export default function AdminLayout({
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  to={item.href}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm transition-colors',
                     isActive
@@ -149,7 +141,7 @@ export default function AdminLayout({
             <DropdownMenuContent align="start" className="w-56 bg-card border-gold/20">
               {navItems.map((item) => (
                 <DropdownMenuItem key={item.href} asChild>
-                  <Link href={item.href} className="flex items-center gap-2">
+                  <Link to={item.href} className="flex items-center gap-2">
                     <item.icon className="w-4 h-4" />
                     {item.label}
                   </Link>
@@ -165,11 +157,11 @@ export default function AdminLayout({
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-gold transition-colors">
+            <Link to="/" className="text-muted-foreground hover:text-gold transition-colors">
               <Home className="w-4 h-4" />
             </Link>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            <Link href="/admin" className="text-muted-foreground hover:text-gold transition-colors">
+            <Link to="/admin" className="text-muted-foreground hover:text-gold transition-colors">
               Admin
             </Link>
             {pathname !== '/admin' && (
@@ -198,7 +190,7 @@ export default function AdminLayout({
 
         {/* Page content */}
         <main className="flex-1 p-4 md:p-6 overflow-auto">
-          {children}
+          <Outlet />
         </main>
       </div>
     </div>

@@ -1,11 +1,8 @@
-'use client'
-
-import Image from 'next/image'
-import Link from 'next/link'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { Button } from '@/shared/ui/button'
 import { ArrowRight } from 'lucide-react'
-import type { StoryMilestone } from '@/lib/types'
+import type { StoryMilestone } from '@/shared/config/types'
 
 interface StorySectionProps {
   milestones: StoryMilestone[]
@@ -68,12 +65,10 @@ export function StorySection({ milestones }: StorySectionProps) {
                   {/* Image */}
                   {milestone.mediaUrl && (
                     <div className="relative aspect-[3/2] rounded-sm overflow-hidden card-glow mt-4">
-                      <Image
+                      <img
                         src={milestone.mediaUrl}
                         alt={milestone.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 400px"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
                     </div>
@@ -96,7 +91,7 @@ export function StorySection({ milestones }: StorySectionProps) {
           size="lg"
           className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 gap-2"
         >
-          <Link href="/our_love">
+          <Link to="/our_love">
             Read Our Full Story
             <ArrowRight className="w-4 h-4" />
           </Link>

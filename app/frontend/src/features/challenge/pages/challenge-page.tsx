@@ -1,26 +1,23 @@
-'use client'
-
 import { useState, useCallback, useEffect } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { Header } from '@/components/wedding/header'
-import { Footer } from '@/components/wedding/footer'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { OrnamentalDivider } from '@/components/wedding/ornamental-divider'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Progress } from '@/components/ui/progress'
-import { Spinner } from '@/components/ui/spinner'
-import { Badge } from '@/components/ui/badge'
+import { useNavigate } from 'react-router-dom'
+import { Header } from '@/shared/layouts/header'
+import { Footer } from '@/shared/layouts/footer'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { OrnamentalDivider } from '@/shared/ui/ornamental-divider'
+import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
+import { Progress } from '@/shared/ui/progress'
+import { Spinner } from '@/shared/ui/spinner'
+import { Badge } from '@/shared/ui/badge'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useRequireAuth, useAuth } from '@/lib/auth/auth-context'
-import { useCollection, useCreateDocument, useUploadFiles } from '@/lib/hooks/use-data'
-import { cn } from '@/lib/utils'
+} from '@/shared/ui/dialog'
+import { useRequireAuth, useAuth } from '@/shared/providers/auth-context'
+import { useCollection, useCreateDocument, useUploadFiles } from '@/shared/hooks/use-data'
+import { cn } from '@/shared/utils/utils'
 import {
   Camera,
   Upload,
@@ -32,10 +29,10 @@ import {
   Loader2,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import type { PhotoCategory, PhotoUpload } from '@/lib/types'
+import type { PhotoCategory, PhotoUpload } from '@/shared/config/types'
 
 export default function ChallengePage() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const { user } = useAuth()
   const { isLoading: authLoading, isAuthorized } = useRequireAuth()
   
@@ -53,9 +50,9 @@ export default function ChallengePage() {
   // Redirect if not authorized
   useEffect(() => {
     if (!authLoading && !isAuthorized) {
-      router.push('/auth')
+      navigate('/auth')
     }
-  }, [authLoading, isAuthorized, router])
+  }, [authLoading, isAuthorized, navigate])
 
   // User's uploads
   const userUploads = uploads.filter(u => u.userId === user?.id)
@@ -187,12 +184,10 @@ export default function ChallengePage() {
                   {/* Cover image */}
                   {category.coverImageUrl && (
                     <div className="relative aspect-[16/10] overflow-hidden">
-                      <Image
+                      <img
                         src={category.coverImageUrl}
                         alt={category.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
                     </div>
@@ -258,12 +253,10 @@ export default function ChallengePage() {
               {userUploads.map((photo) => (
                 <div key={photo.id} className="relative group">
                   <div className="relative aspect-square rounded-sm overflow-hidden card-glow">
-                    <Image
+                    <img
                       src={photo.imageUrl}
                       alt={photo.caption || 'Uploaded photo'}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="absolute inset-0 h-full w-full object-cover"
                     />
                     
                     {/* Status badge */}
@@ -323,12 +316,10 @@ export default function ChallengePage() {
                 <div className="grid grid-cols-3 gap-2">
                   {previews.map((preview, index) => (
                     <div key={index} className="relative aspect-square">
-                      <Image
+                      <img
                         src={preview}
                         alt={`Preview ${index + 1}`}
-                        fill
-                        className="object-cover rounded-sm"
-                        sizes="100px"
+                        className="absolute inset-0 h-full w-full object-cover rounded-sm"
                       />
                       <button
                         onClick={() => removeFile(index)}

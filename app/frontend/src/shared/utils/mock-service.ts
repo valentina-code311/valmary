@@ -1,4 +1,10 @@
-import type { QueryOptions } from '@/lib/types'
+import type {
+  QueryOptions,
+  Challenge,
+  ChallengeSubmissionStatus,
+  WishStatus,
+  WeddingSettings,
+} from '@/shared/config/types'
 import {
   mockUsers,
   mockHeroSlides,
@@ -9,7 +15,10 @@ import {
   mockPhotoUploads,
   mockWishes,
   mockPlaylistTracks,
-} from '@/lib/mock-data'
+  mockChallenges,
+  mockChallengeSubmissions,
+  mockWeddingSettings,
+} from '@/shared/utils/mock-data'
 
 // Type-safe collection mapping
 type CollectionData = {
@@ -22,6 +31,8 @@ type CollectionData = {
   photoUploads: typeof mockPhotoUploads
   wishes: typeof mockWishes
   playlistTracks: typeof mockPlaylistTracks
+  challenges: typeof mockChallenges
+  challengeSubmissions: typeof mockChallengeSubmissions
 }
 
 // In-memory store for mutations (simulates Firebase real-time updates)
@@ -35,6 +46,8 @@ const store: CollectionData = {
   photoUploads: [...mockPhotoUploads],
   wishes: [...mockWishes],
   playlistTracks: [...mockPlaylistTracks],
+  challenges: [...mockChallenges],
+  challengeSubmissions: [...mockChallengeSubmissions],
 }
 
 // Simulate network delay
@@ -215,4 +228,118 @@ export async function moderateWishMessage(text: string): Promise<{
     reason: 'Message approved',
     warningMessage: '',
   }
+}
+
+// =====================================================================
+// Compatibilidad con el panel Admin (CMS)
+// Adaptadores entre el esquema plano del CMS y las colecciones base.
+// =====================================================================
+
+// Wedding settings (singleton en memoria)
+let weddingSettings: WeddingSettings = { ...mockWeddingSettings }
+
+export async function getWeddingSettings(): Promise<WeddingSettings> {
+  await delay()
+  return { ...weddingSettings }
+}
+
+// Formularios planos que usa el CMS
+interface MilestoneForm {
+  date: string
+  title: string
+  description: string
+  imageUrl: string
+}
+
+interface CeremonyStepForm {
+  order: number
+  title: string
+  description: string
+  time: string
+}
+
+export const mockService = {
+  // Challenges
+  createChallenge: (data: Omit<Challenge, 'id' | 'isActive'>) =>
+    createDocument('challenges', { isActive: true, ...data }),
+  updateChallenge: (id: string, data: Partial<Challenge>) =>
+    updateDocument('challenges', id, data),
+  updateSubmissionStatus: (id: string, status: ChallengeSubmissionStatus) =>
+    updateDocument('challengeSubmissions', id, { status }),
+
+  // Wishes
+  updateWishStatus: (id: string, status: WishStatus) =>
+    updateDocument('wishes', id, { status }),
+
+  // Story milestones (CMS: date/description/imageUrl <-> base: dateLabel/shortDescription/mediaUrl)
+  createMilestone: (form: MilestoneForm) =>
+    createDocument('storyMilestones', {
+      title: form.title,
+      dateLabel: form.date,
+      shortDescription: form.description,
+      mediaUrl: form.imageUrl,
+      order: store.storyMilestones.length + 1,
+    }),
+  updateMilestone: (id: string, form: MilestoneForm) =>
+    updateDocument('storyMilestones', id, {
+      title: form.title,
+      dateLabel: form.date,
+      shortDescription: form.description,
+      mediaUrl: form.imageUrl,
+    }),
+  deleteMilestone: (id: string) => deleteDocument('storyMilestones', id),
+
+  // Ceremony steps (CMS: description/time <-> base: shortDescription; time se conserva como extra)
+  createCeremonyStep: (form: CeremonyStepForm) =>
+    createDocument('ceremonySteps', {
+      title: form.title,
+      order: form.order,
+      symbolicType: 'words',
+      shortDescription: form.description,
+      longDescription: form.description,
+      time: form.time,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any),
+  updateCeremonyStep: (id: string, form: CeremonyStepForm) =>
+    updateDocument('ceremonySteps', id, {
+      title: form.title,
+      order: form.order,
+      shortDescription: form.description,
+      longDescription: form.description,
+      time: form.time,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any),
+  deleteCeremonyStep: (id: string) => deleteDocument('ceremonySteps', id),
+
+  // Gallery photos (CMS: url/caption <-> photoUploads: imageUrl/caption)
+  createGalleryPhoto: (form: { url: string; caption: string; category: string }) =>
+    createDocument('photoUploads', {
+      userId: 'admin',
+      categoryId: form.category,
+      imageUrl: form.url,
+      caption: form.caption,
+      status: 'approved',
+      createdAt: new Date(),
+    }),
+  deleteGalleryPhoto: (id: string) => deleteDocument('photoUploads', id),
+
+  // Playlist (CMS: spotifyUrl/significance <-> base: externalUrl; significance se conserva como extra)
+  createPlaylistTrack: (form: { title: string; artist: string; spotifyUrl: string; significance: string }) =>
+    createDocument('playlistTracks', {
+      title: form.title,
+      artist: form.artist,
+      duration: '',
+      order: store.playlistTracks.length + 1,
+      externalUrl: form.spotifyUrl,
+      significance: form.significance,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any),
+  deletePlaylistTrack: (id: string) => deleteDocument('playlistTracks', id),
+
+  // Wedding settings
+  updateSettings: async (data: Partial<WeddingSettings>): Promise<WeddingSettings> => {
+    await delay()
+    weddingSettings = { ...weddingSettings, ...data }
+    return { ...weddingSettings }
+  },
 }

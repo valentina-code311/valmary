@@ -138,3 +138,40 @@ export interface QueryOptions {
   limit?: number
   startAfter?: unknown
 }
+
+// --- Admin CMS compat: Challenges ---
+export type ChallengeSubmissionStatus = 'pending' | 'approved' | 'rejected'
+
+export interface Challenge {
+  id: string
+  title: string
+  description: string
+  points: number
+  isActive: boolean
+}
+
+export interface ChallengeSubmission {
+  id: string
+  challengeId: string
+  guestName: string
+  imageUrl: string
+  caption?: string
+  status: ChallengeSubmissionStatus
+  createdAt: Date
+}
+
+// --- Admin CMS compat: Wedding Settings ---
+export interface WeddingSettings {
+  brideName1: string
+  brideName2: string
+  weddingDate: string
+  venueName: string
+  venueAddress: string
+  heroTitle: string
+  heroSubtitle: string
+  enableWishes: boolean
+  requireApprovalForWishes: boolean
+  enableChallenges: boolean
+  guestPassword: string
+  adminPassword: string
+}

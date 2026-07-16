@@ -1,22 +1,20 @@
-"use client"
-
 import { useState } from "react"
-import { useStoryMilestones, useCeremonySteps, useGalleryPhotos, usePlaylistTracks } from "@/lib/hooks/use-data"
-import { mockService } from "@/lib/services/mock-service"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useStoryMilestones, useCeremonySteps, useGalleryPhotos, usePlaylistTracks } from "@/shared/hooks/use-data"
+import { mockService } from "@/shared/utils/mock-service"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
+import { Input } from "@/shared/ui/input"
+import { Textarea } from "@/shared/ui/textarea"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/shared/ui/dialog"
 import { Plus, Edit2, Trash2, Heart, Music, Image, Calendar } from "lucide-react"
-import type { StoryMilestone, CeremonyStep, GalleryPhoto, PlaylistTrack } from "@/lib/types"
+import type { StoryMilestone, CeremonyStep, GalleryPhoto, PlaylistTrack } from "@/shared/config/types"
 
 export default function ContentAdminPage() {
   return (

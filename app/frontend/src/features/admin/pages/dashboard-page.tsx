@@ -1,10 +1,8 @@
-'use client'
-
-import Link from 'next/link'
-import { useCollection } from '@/lib/hooks/use-data'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import { useCollection } from '@/shared/hooks/use-data'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
+import { Badge } from '@/shared/ui/badge'
+import { Button } from '@/shared/ui/button'
 import {
   Image as ImageIcon,
   Heart,
@@ -26,7 +24,7 @@ import type {
   Wish,
   User,
   PlaylistTrack,
-} from '@/lib/types'
+} from '@/shared/config/types'
 
 export default function AdminDashboard() {
   const { data: heroSlides } = useCollection<HeroSlide>('heroSlides')
@@ -132,7 +130,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <Button asChild size="sm" variant="outline" className="border-yellow-500/30">
-                  <Link href="/admin/photos">Review</Link>
+                  <Link to="/admin/photos">Review</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -153,7 +151,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <Button asChild size="sm" variant="outline" className="border-yellow-500/30">
-                  <Link href="/admin/wishes">Review</Link>
+                  <Link to="/admin/wishes">Review</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -166,7 +164,7 @@ export default function AdminDashboard() {
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
-            <Link key={stat.href} href={stat.href}>
+            <Link key={stat.href} to={stat.href}>
               <Card className="border-gold/10 hover:border-gold/30 transition-colors group">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -202,7 +200,7 @@ export default function AdminDashboard() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg font-medium">Recent Photo Uploads</CardTitle>
             <Button asChild variant="ghost" size="sm">
-              <Link href="/admin/photos">View All</Link>
+              <Link to="/admin/photos">View All</Link>
             </Button>
           </CardHeader>
           <CardContent>
@@ -247,7 +245,7 @@ export default function AdminDashboard() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg font-medium">Recent Wishes</CardTitle>
             <Button asChild variant="ghost" size="sm">
-              <Link href="/admin/wishes">View All</Link>
+              <Link to="/admin/wishes">View All</Link>
             </Button>
           </CardHeader>
           <CardContent>

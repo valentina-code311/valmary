@@ -1,12 +1,9 @@
-'use client'
-
 import { useState } from 'react'
-import Image from 'next/image'
-import { cn } from '@/lib/utils'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { cn } from '@/shared/utils/utils'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { Dialog, DialogContent } from '@/shared/ui/dialog'
 import { X } from 'lucide-react'
-import type { PhotoUpload, PhotoCategory } from '@/lib/types'
+import type { PhotoUpload, PhotoCategory } from '@/shared/config/types'
 
 interface GallerySectionProps {
   photos: PhotoUpload[]
@@ -85,12 +82,10 @@ export function GallerySection({ photos, categories }: GallerySectionProps) {
             )}
           >
             <div className={cn('relative', index === 0 ? 'aspect-square' : 'aspect-[4/3]')}>
-              <Image
+              <img
                 src={photo.imageUrl}
                 alt={photo.caption || 'Wedding photo'}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                sizes={index === 0 ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 50vw, 25vw'}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -119,12 +114,10 @@ export function GallerySection({ photos, categories }: GallerySectionProps) {
           {selectedPhoto && (
             <div className="relative">
               <div className="relative aspect-[4/3] md:aspect-[16/10]">
-                <Image
+                <img
                   src={selectedPhoto.imageUrl}
                   alt={selectedPhoto.caption || 'Wedding photo'}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 1024px) 100vw, 80vw"
+                  className="absolute inset-0 h-full w-full object-contain"
                 />
               </div>
               {selectedPhoto.caption && (

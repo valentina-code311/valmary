@@ -1,12 +1,9 @@
-'use client'
-
-import Image from 'next/image'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import { cn } from '@/shared/utils/utils'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { Button } from '@/shared/ui/button'
 import { ArrowRight, Leaf, Flame, Wind, Heart, Quote } from 'lucide-react'
-import type { CeremonyStep, SymbolicType } from '@/lib/types'
+import type { CeremonyStep, SymbolicType } from '@/shared/config/types'
 
 const symbolIcons: Record<SymbolicType, React.ReactNode> = {
   earth: <Leaf className="w-6 h-6" />,
@@ -63,7 +60,7 @@ export function CeremonySection({ steps }: CeremonySectionProps) {
           size="lg"
           className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 gap-2"
         >
-          <Link href="/ceremony">
+          <Link to="/ceremony">
             Discover the Full Ceremony
             <ArrowRight className="w-4 h-4" />
           </Link>
@@ -87,12 +84,10 @@ function CeremonyCard({ step }: { step: CeremonyStep }) {
       {/* Image */}
       {step.mediaUrl && (
         <div className="relative aspect-[16/10] overflow-hidden">
-          <Image
+          <img
             src={step.mediaUrl}
             alt={step.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 33vw"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
         </div>

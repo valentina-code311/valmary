@@ -1,10 +1,7 @@
-'use client'
-
-import Image from 'next/image'
-import { cn } from '@/lib/utils'
-import { OrnamentalDivider } from '@/components/wedding/ornamental-divider'
+import { cn } from '@/shared/utils/utils'
+import { OrnamentalDivider } from '@/shared/ui/ornamental-divider'
 import { Quote, Play, Music } from 'lucide-react'
-import type { ContentBlock } from '@/lib/types'
+import type { ContentBlock } from '@/shared/config/types'
 
 interface ContentBlocksProps {
   blocks: ContentBlock[]
@@ -73,12 +70,10 @@ function ImageBlock({ content }: { content: Record<string, unknown> }) {
   return (
     <figure className="space-y-4">
       <div className="relative aspect-[16/9] rounded-sm overflow-hidden card-glow">
-        <Image
+        <img
           src={url}
           alt={alt}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 700px"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
       {caption && (
@@ -98,12 +93,10 @@ function GalleryBlock({ content }: { content: Record<string, unknown> }) {
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
       {images.map((image, index) => (
         <div key={index} className="relative aspect-square rounded-sm overflow-hidden card-glow group">
-          <Image
+          <img
             src={image.url}
             alt={image.alt}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 50vw, 200px"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
@@ -123,12 +116,10 @@ function VideoBlock({ content }: { content: Record<string, unknown> }) {
       <div className="relative aspect-video rounded-sm overflow-hidden card-glow bg-muted">
         {thumbnail ? (
           <div className="relative w-full h-full group cursor-pointer">
-            <Image
+            <img
               src={thumbnail}
               alt="Video thumbnail"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 700px"
+              className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-background/30 group-hover:bg-background/50 transition-colors">
               <div className="w-16 h-16 rounded-full bg-gold/90 flex items-center justify-center group-hover:scale-110 transition-transform">

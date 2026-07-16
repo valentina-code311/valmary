@@ -1,10 +1,7 @@
-'use client'
-
-import Image from 'next/image'
-import { cn } from '@/lib/utils'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
+import { cn } from '@/shared/utils/utils'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
 import { Music, ExternalLink, Play } from 'lucide-react'
-import type { PlaylistTrack } from '@/lib/types'
+import type { PlaylistTrack } from '@/shared/config/types'
 
 interface PlaylistSectionProps {
   tracks: PlaylistTrack[]
@@ -65,12 +62,10 @@ function TrackItem({ track, index }: { track: PlaylistTrack; index: number }) {
       {/* Cover */}
       <div className="relative w-12 h-12 rounded-sm overflow-hidden bg-muted flex-shrink-0">
         {track.coverUrl ? (
-          <Image
+          <img
             src={track.coverUrl}
             alt={`${track.title} cover`}
-            fill
-            className="object-cover"
-            sizes="48px"
+            className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

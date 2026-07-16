@@ -1,13 +1,10 @@
-'use client'
-
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { HeroWrapper } from '@/components/wedding/section-wrapper'
+import { Link } from 'react-router-dom'
+import { cn } from '@/shared/utils/utils'
+import { Button } from '@/shared/ui/button'
+import { HeroWrapper } from '@/shared/ui/section-wrapper'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import type { HeroSlide } from '@/lib/types'
+import type { HeroSlide } from '@/shared/config/types'
 
 interface HeroSectionProps {
   slides: HeroSlide[]
@@ -78,7 +75,7 @@ export function HeroSection({ slides }: HeroSectionProps) {
                 size="lg"
                 className="bg-gold hover:bg-gold-light text-background font-medium tracking-wide"
               >
-                <Link href="/our_love">Our Love Story</Link>
+                <Link to="/our_love">Our Love Story</Link>
               </Button>
               <Button
                 asChild
@@ -86,7 +83,7 @@ export function HeroSection({ slides }: HeroSectionProps) {
                 size="lg"
                 className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 tracking-wide"
               >
-                <Link href="/best_wishes">Leave a Wish</Link>
+                <Link to="/best_wishes">Leave a Wish</Link>
               </Button>
             </div>
           </div>
@@ -110,13 +107,10 @@ export function HeroSection({ slides }: HeroSectionProps) {
                         : 'opacity-0 scale-105'
                     )}
                   >
-                    <Image
+                    <img
                       src={s.imageUrl}
                       alt={s.title}
-                      fill
-                      className="object-cover"
-                      priority={index === 0}
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="absolute inset-0 h-full w-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                   </div>

@@ -1,6 +1,4 @@
-'use client'
-
-import { cn } from '@/lib/utils'
+import { cn } from '@/shared/utils/utils'
 import { OrnamentalDivider } from './ornamental-divider'
 
 interface SectionWrapperProps {

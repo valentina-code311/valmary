@@ -1,14 +1,11 @@
-'use client'
-
-import Image from 'next/image'
-import { Header } from '@/components/wedding/header'
-import { Footer } from '@/components/wedding/footer'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { ContentBlocks } from '@/components/content/content-blocks'
-import { OrnamentalDivider } from '@/components/wedding/ornamental-divider'
-import { useDocument, useCollection } from '@/lib/hooks/use-data'
-import { Skeleton } from '@/components/ui/skeleton'
-import type { Page, StoryMilestone } from '@/lib/types'
+import { Header } from '@/shared/layouts/header'
+import { Footer } from '@/shared/layouts/footer'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { ContentBlocks } from '@/shared/ui/content-blocks'
+import { OrnamentalDivider } from '@/shared/ui/ornamental-divider'
+import { useDocument, useCollection } from '@/shared/hooks/use-data'
+import { Skeleton } from '@/shared/ui/skeleton'
+import type { Page, StoryMilestone } from '@/shared/config/types'
 
 export default function OurLovePage() {
   const { data: page, isLoading } = useDocument<Page>('pages', 'page-1')
@@ -53,13 +50,10 @@ export default function OurLovePage() {
         <section className="container mx-auto px-4 md:px-6 pb-16">
           <div className="relative max-w-4xl mx-auto">
             <div className="relative aspect-[21/9] rounded-sm overflow-hidden card-glow">
-              <Image
+              <img
                 src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&h=600&fit=crop"
                 alt="Elena and Sofia"
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1200px) 100vw, 900px"
+                className="absolute inset-0 h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-background/20" />
             </div>
@@ -134,12 +128,10 @@ export default function OurLovePage() {
                         
                         {milestone.mediaUrl && (
                           <div className="relative aspect-[4/3] rounded-sm overflow-hidden card-glow mt-6">
-                            <Image
+                            <img
                               src={milestone.mediaUrl}
                               alt={milestone.title}
-                              fill
-                              className="object-cover transition-transform duration-500 group-hover:scale-105"
-                              sizes="(max-width: 768px) 100vw, 400px"
+                              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
                           </div>

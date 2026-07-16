@@ -1,14 +1,12 @@
-"use client"
-
 import { useState } from "react"
-import { useWishes } from "@/lib/hooks/use-data"
-import { mockService } from "@/lib/services/mock-service"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useWishes } from "@/shared/hooks/use-data"
+import { mockService } from "@/shared/utils/mock-service"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
+import { Badge } from "@/shared/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import { Check, X, Clock, Heart, MessageSquare } from "lucide-react"
-import type { Wish } from "@/lib/types"
+import type { Wish } from "@/shared/config/types"
 
 export default function WishesModerationPage() {
   const { wishes, mutate } = useWishes()

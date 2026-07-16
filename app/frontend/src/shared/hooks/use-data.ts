@@ -1,8 +1,6 @@
-'use client'
-
 import useSWR, { mutate } from 'swr'
 import { useCallback, useState } from 'react'
-import type { QueryOptions } from '@/lib/types'
+import type { QueryOptions } from '@/shared/config/types'
 import {
   getCollection,
   getDocument,
@@ -11,7 +9,8 @@ import {
   deleteDocument,
   uploadFiles,
   moderateWishMessage,
-} from '@/lib/services/mock-service'
+  getWeddingSettings,
+} from '@/shared/utils/mock-service'
 
 // Collection names type
 type CollectionName = 
@@ -24,6 +23,8 @@ type CollectionName =
   | 'photoUploads'
   | 'wishes'
   | 'playlistTracks'
+  | 'challenges'
+  | 'challengeSubmissions'
 
 // Hook for fetching a collection
 export function useCollection<T>(
@@ -211,4 +212,118 @@ export function useModerateWishMessage() {
   }, [])
 
   return { moderate, isLoading, error }
+}
+
+// =====================================================================
+// Hooks del panel Admin (CMS)
+// Devuelven la colección con nombre propio + mutate, sobre el mock-service.
+// =====================================================================
+
+import type {
+  Wish,
+  StoryMilestone,
+  CeremonyStep,
+  PhotoUpload,
+  PlaylistTrack,
+  Challenge,
+  ChallengeSubmission,
+} from '@/shared/config/types'
+
+export function useWishes() {
+  const key = 'admin/wishes'
+  const { data, error, isLoading } = useSWR(key, async () => {
+    const wishes = (await getCollection('wishes')) as Wish[]
+    // CMS usa guestName; el esquema base usa authorName
+    return wishes.map(w => ({
+      id: w.id,
+      guestName: w.authorName,
+      message: w.message,
+      status: w.status,
+      createdAt: w.createdAt,
+    }))
+  })
+  return { wishes: data ?? [], error, isLoading, mutate: () => mutate(key) }
+}
+
+export function useChallenges() {
+  const key = 'admin/challenges'
+  const { data, error, isLoading } = useSWR(key, () =>
+    getCollection('challenges') as Promise<Challenge[]>
+  )
+  return { challenges: data ?? [], error, isLoading, mutate: () => mutate(key) }
+}
+
+export function useChallengeSubmissions() {
+  const key = 'admin/challengeSubmissions'
+  const { data, error, isLoading } = useSWR(key, () =>
+    getCollection('challengeSubmissions') as Promise<ChallengeSubmission[]>
+  )
+  return { submissions: data ?? [], error, isLoading, mutate: () => mutate(key) }
+}
+
+export function useWeddingSettings() {
+  const key = 'admin/weddingSettings'
+  const { data, error, isLoading } = useSWR(key, getWeddingSettings)
+  return { settings: data, error, isLoading, mutate: () => mutate(key) }
+}
+
+export function useStoryMilestones() {
+  const key = 'admin/storyMilestones'
+  const { data, error, isLoading } = useSWR(key, async () => {
+    const milestones = (await getCollection('storyMilestones')) as StoryMilestone[]
+    // CMS usa date/description/imageUrl; base usa dateLabel/shortDescription/mediaUrl
+    return milestones.map(m => ({
+      id: m.id,
+      title: m.title,
+      date: m.dateLabel,
+      description: m.shortDescription,
+      imageUrl: m.mediaUrl ?? '',
+    }))
+  })
+  return { milestones: data ?? [], error, isLoading, mutate: () => mutate(key) }
+}
+
+export function useCeremonySteps() {
+  const key = 'admin/ceremonySteps'
+  const { data, error, isLoading } = useSWR(key, async () => {
+    const steps = (await getCollection('ceremonySteps')) as CeremonyStep[]
+    return steps.map(s => ({
+      id: s.id,
+      order: s.order,
+      title: s.title,
+      description: s.shortDescription,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      time: (s as any).time ?? '',
+    }))
+  })
+  return { steps: data ?? [], error, isLoading, mutate: () => mutate(key) }
+}
+
+export function useGalleryPhotos() {
+  const key = 'admin/galleryPhotos'
+  const { data, error, isLoading } = useSWR(key, async () => {
+    const photos = (await getCollection('photoUploads')) as PhotoUpload[]
+    // CMS usa url; base usa imageUrl
+    return photos.map(p => ({
+      id: p.id,
+      url: p.imageUrl,
+      caption: p.caption ?? '',
+    }))
+  })
+  return { photos: data ?? [], error, isLoading, mutate: () => mutate(key) }
+}
+
+export function usePlaylistTracks() {
+  const key = 'admin/playlistTracks'
+  const { data, error, isLoading } = useSWR(key, async () => {
+    const tracks = (await getCollection('playlistTracks')) as PlaylistTrack[]
+    return tracks.map(t => ({
+      id: t.id,
+      title: t.title,
+      artist: t.artist,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      significance: (t as any).significance ?? '',
+    }))
+  })
+  return { tracks: data ?? [], error, isLoading, mutate: () => mutate(key) }
 }

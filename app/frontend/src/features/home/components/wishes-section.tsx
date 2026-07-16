@@ -1,13 +1,11 @@
-'use client'
-
 import { useRef, useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { Button } from '@/components/ui/button'
-import { DecorativeFrame } from '@/components/wedding/ornamental-divider'
+import { Link } from 'react-router-dom'
+import { cn } from '@/shared/utils/utils'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { Button } from '@/shared/ui/button'
+import { DecorativeFrame } from '@/shared/ui/ornamental-divider'
 import { ArrowRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import type { Wish } from '@/lib/types'
+import type { Wish } from '@/shared/config/types'
 
 interface WishesSectionProps {
   wishes: Wish[]
@@ -121,7 +119,7 @@ export function WishesSection({ wishes }: WishesSectionProps) {
           size="lg"
           className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 gap-2"
         >
-          <Link href="/best_wishes">
+          <Link to="/best_wishes">
             Share Your Wishes
             <ArrowRight className="w-4 h-4" />
           </Link>

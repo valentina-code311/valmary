@@ -1,23 +1,21 @@
-'use client'
-
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useAuth } from '@/lib/auth/auth-context'
-import { OrnamentalDivider } from '@/components/wedding/ornamental-divider'
-import { DecorativeFrame } from '@/components/wedding/ornamental-divider'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { FieldGroup, Field, FieldLabel } from '@/components/ui/field'
-import { Spinner } from '@/components/ui/spinner'
-import { cn } from '@/lib/utils'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useAuth } from '@/shared/providers/auth-context'
+import { OrnamentalDivider } from '@/shared/ui/ornamental-divider'
+import { DecorativeFrame } from '@/shared/ui/ornamental-divider'
+import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
+import { FieldGroup, Field, FieldLabel } from '@/shared/ui/field'
+import { Spinner } from '@/shared/ui/spinner'
+import { cn } from '@/shared/utils/utils'
 import { Mail, Lock, ArrowLeft, Heart } from 'lucide-react'
 import { toast } from 'sonner'
 
 type AuthMode = 'login' | 'recovery'
 
 export default function AuthPage() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const { login, requestPasswordReset, isAuthenticated } = useAuth()
   
   const [mode, setMode] = useState<AuthMode>('login')
@@ -28,7 +26,7 @@ export default function AuthPage() {
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    router.push('/')
+    navigate('/')
     return null
   }
 
@@ -41,7 +39,7 @@ export default function AuthPage() {
     
     if (result.success) {
       toast.success('Welcome back!')
-      router.push('/')
+      navigate('/')
     } else {
       setError(result.error || 'Login failed')
     }
@@ -78,7 +76,7 @@ export default function AuthPage() {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo / Title */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-block">
+          <Link to="/" className="inline-block">
             <h1 className="font-script text-5xl text-gold hover:text-gold-light transition-colors">
               E & S
             </h1>
@@ -237,7 +235,7 @@ export default function AuthPage() {
         {/* Back to home */}
         <div className="text-center mt-8">
           <Link
-            href="/"
+            to="/"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-gold transition-colors"
           >
             <Heart className="w-4 h-4" />

@@ -1,8 +1,6 @@
-'use client'
-
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
-import type { User } from '@/lib/types'
-import { mockUsers } from '@/lib/mock-data'
+import type { User } from '@/shared/config/types'
+import { mockUsers } from '@/shared/utils/mock-data'
 
 interface AuthContextType {
   user: User | null

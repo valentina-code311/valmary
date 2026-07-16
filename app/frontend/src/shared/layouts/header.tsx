@@ -1,25 +1,23 @@
-'use client'
-
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { useAuth } from '@/lib/auth/auth-context'
-import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { cn } from '@/shared/utils/utils'
+import { useAuth } from '@/shared/providers/auth-context'
+import { Button } from '@/shared/ui/button'
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet'
+} from '@/shared/ui/sheet'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/shared/ui/dropdown-menu'
 import { Menu, User, LogOut, Camera, Settings } from 'lucide-react'
 
 const navLinks = [
@@ -30,7 +28,7 @@ const navLinks = [
 ]
 
 export function Header() {
-  const pathname = usePathname()
+  const { pathname } = useLocation()
   const { user, isAuthenticated, isAdmin, logout } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -61,7 +59,7 @@ export function Header() {
         <nav className="flex items-center justify-between">
           {/* Logo */}
           <Link
-            href="/"
+            to="/"
             className="font-script text-3xl md:text-4xl text-gold hover:text-gold-light transition-colors"
           >
             E & S
@@ -72,7 +70,7 @@ export function Header() {
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
-                  href={link.href}
+                  to={link.href}
                   className={cn(
                     'text-sm tracking-widest uppercase transition-colors hover:text-gold',
                     pathname === link.href
@@ -104,7 +102,7 @@ export function Header() {
                   {isAdmin && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin" className="flex items-center gap-2">
+                        <Link to="/admin" className="flex items-center gap-2">
                           <Settings className="w-4 h-4" />
                           Admin Panel
                         </Link>
@@ -113,7 +111,7 @@ export function Header() {
                     </>
                   )}
                   <DropdownMenuItem asChild>
-                    <Link href="/challenge" className="flex items-center gap-2">
+                    <Link to="/challenge" className="flex items-center gap-2">
                       <Camera className="w-4 h-4" />
                       Photo Challenge
                     </Link>
@@ -132,7 +130,7 @@ export function Header() {
                 size="sm"
                 className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50"
               >
-                <Link href="/auth">Sign In</Link>
+                <Link to="/auth">Sign In</Link>
               </Button>
             )}
           </div>
@@ -160,7 +158,7 @@ export function Header() {
                   {navLinks.map((link) => (
                     <li key={link.href}>
                       <Link
-                        href={link.href}
+                        to={link.href}
                         onClick={() => setIsOpen(false)}
                         className={cn(
                           'block py-2 text-lg tracking-wide transition-colors hover:text-gold',
@@ -182,7 +180,7 @@ export function Header() {
                       </p>
                       {isAdmin && (
                         <Link
-                          href="/admin"
+                          to="/admin"
                           onClick={() => setIsOpen(false)}
                           className="flex items-center gap-2 text-foreground/70 hover:text-gold transition-colors"
                         >
@@ -191,7 +189,7 @@ export function Header() {
                         </Link>
                       )}
                       <Link
-                        href="/challenge"
+                        to="/challenge"
                         onClick={() => setIsOpen(false)}
                         className="flex items-center gap-2 text-foreground/70 hover:text-gold transition-colors"
                       >
@@ -211,7 +209,7 @@ export function Header() {
                       asChild
                       className="w-full bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20"
                     >
-                      <Link href="/auth" onClick={() => setIsOpen(false)}>
+                      <Link to="/auth" onClick={() => setIsOpen(false)}>
                         Sign In
                       </Link>
                     </Button>

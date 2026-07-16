@@ -1,14 +1,12 @@
-"use client"
-
 import { useState } from "react"
-import { useWeddingSettings } from "@/lib/hooks/use-data"
-import { mockService } from "@/lib/services/mock-service"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import { useWeddingSettings } from "@/shared/hooks/use-data"
+import { mockService } from "@/shared/utils/mock-service"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
+import { Input } from "@/shared/ui/input"
+import { Textarea } from "@/shared/ui/textarea"
+import { Switch } from "@/shared/ui/switch"
+import { Label } from "@/shared/ui/label"
 import { Save, Calendar, MapPin, Key, Users } from "lucide-react"
 
 export default function SettingsAdminPage() {

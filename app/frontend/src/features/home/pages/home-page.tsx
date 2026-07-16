@@ -1,14 +1,12 @@
-'use client'
-
-import { Header } from '@/components/wedding/header'
-import { Footer } from '@/components/wedding/footer'
-import { HeroSection } from '@/components/home/hero-section'
-import { StorySection } from '@/components/home/story-section'
-import { CeremonySection } from '@/components/home/ceremony-section'
-import { WishesSection } from '@/components/home/wishes-section'
-import { GallerySection } from '@/components/home/gallery-section'
-import { PlaylistSection } from '@/components/home/playlist-section'
-import { useCollection } from '@/lib/hooks/use-data'
+import { Header } from '@/shared/layouts/header'
+import { Footer } from '@/shared/layouts/footer'
+import { HeroSection } from '@/features/home/components/hero-section'
+import { StorySection } from '@/features/home/components/story-section'
+import { CeremonySection } from '@/features/home/components/ceremony-section'
+import { WishesSection } from '@/features/home/components/wishes-section'
+import { GallerySection } from '@/features/home/components/gallery-section'
+import { PlaylistSection } from '@/features/home/components/playlist-section'
+import { useCollection } from '@/shared/hooks/use-data'
 import type {
   HeroSlide,
   StoryMilestone,
@@ -17,7 +15,7 @@ import type {
   PhotoUpload,
   PhotoCategory,
   PlaylistTrack,
-} from '@/lib/types'
+} from '@/shared/config/types'
 
 export default function HomePage() {
   // Fetch all data

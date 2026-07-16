@@ -1,16 +1,13 @@
-'use client'
-
-import Image from 'next/image'
-import { Header } from '@/components/wedding/header'
-import { Footer } from '@/components/wedding/footer'
-import { SectionWrapper } from '@/components/wedding/section-wrapper'
-import { ContentBlocks } from '@/components/content/content-blocks'
-import { OrnamentalDivider } from '@/components/wedding/ornamental-divider'
-import { useDocument, useCollection } from '@/lib/hooks/use-data'
-import { Skeleton } from '@/components/ui/skeleton'
-import { cn } from '@/lib/utils'
+import { Header } from '@/shared/layouts/header'
+import { Footer } from '@/shared/layouts/footer'
+import { SectionWrapper } from '@/shared/ui/section-wrapper'
+import { ContentBlocks } from '@/shared/ui/content-blocks'
+import { OrnamentalDivider } from '@/shared/ui/ornamental-divider'
+import { useDocument, useCollection } from '@/shared/hooks/use-data'
+import { Skeleton } from '@/shared/ui/skeleton'
+import { cn } from '@/shared/utils/utils'
 import { Leaf, Flame, Wind, Heart, Quote } from 'lucide-react'
-import type { Page, CeremonyStep, SymbolicType } from '@/lib/types'
+import type { Page, CeremonyStep, SymbolicType } from '@/shared/config/types'
 
 const symbolIcons: Record<SymbolicType, React.ReactNode> = {
   earth: <Leaf className="w-8 h-8" />,
@@ -172,12 +169,10 @@ export default function CeremonyPage() {
                     {step.mediaUrl && (
                       <div className="relative">
                         <div className="relative aspect-[4/5] rounded-sm overflow-hidden card-glow">
-                          <Image
+                          <img
                             src={step.mediaUrl}
                             alt={step.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 400px"
+                            className="absolute inset-0 h-full w-full object-cover"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                         </div>

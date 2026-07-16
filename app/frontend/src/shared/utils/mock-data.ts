@@ -9,7 +9,10 @@ import type {
   Wish,
   PlaylistTrack,
   ContentBlock,
-} from './types'
+  Challenge,
+  ChallengeSubmission,
+  WeddingSettings,
+} from '@/shared/config/types'
 
 // Mock Users
 export const mockUsers: User[] = [
@@ -497,3 +500,65 @@ export const mockPlaylistTracks: PlaylistTrack[] = [
     order: 8,
   },
 ]
+
+// --- Admin CMS compat: Challenges ---
+export const mockChallenges: Challenge[] = [
+  {
+    id: 'challenge-1',
+    title: 'Golden Hour Portraits',
+    description: 'Capture the couple during golden hour',
+    points: 20,
+    isActive: true,
+  },
+  {
+    id: 'challenge-2',
+    title: 'Dance Floor Moments',
+    description: 'Best candid shot on the dance floor',
+    points: 15,
+    isActive: true,
+  },
+  {
+    id: 'challenge-3',
+    title: 'Guest Selfies',
+    description: 'Take a selfie with the brides',
+    points: 10,
+    isActive: false,
+  },
+]
+
+export const mockChallengeSubmissions: ChallengeSubmission[] = [
+  {
+    id: 'submission-1',
+    challengeId: 'challenge-1',
+    guestName: 'Maria Gonzalez',
+    imageUrl: '/placeholder.jpg',
+    caption: 'Magic light!',
+    status: 'pending',
+    createdAt: new Date('2026-06-20'),
+  },
+  {
+    id: 'submission-2',
+    challengeId: 'challenge-2',
+    guestName: 'Carlos Mendez',
+    imageUrl: '/placeholder.jpg',
+    caption: 'Dancing all night',
+    status: 'approved',
+    createdAt: new Date('2026-06-21'),
+  },
+]
+
+// --- Admin CMS compat: Wedding Settings ---
+export const mockWeddingSettings: WeddingSettings = {
+  brideName1: 'Elena',
+  brideName2: 'Sofia',
+  weddingDate: '2026-09-12',
+  venueName: 'Villa del Mar',
+  venueAddress: '123 Ocean Drive, Valencia',
+  heroTitle: 'Elena & Sofia',
+  heroSubtitle: 'Celebrate love, unity, and the beginning of forever.',
+  enableWishes: true,
+  requireApprovalForWishes: true,
+  enableChallenges: true,
+  guestPassword: 'guest123',
+  adminPassword: 'admin123',
+}

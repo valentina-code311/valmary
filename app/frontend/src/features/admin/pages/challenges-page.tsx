@@ -1,23 +1,21 @@
-"use client"
-
 import { useState } from "react"
-import { useChallenges, useChallengeSubmissions } from "@/lib/hooks/use-data"
-import { mockService } from "@/lib/services/mock-service"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useChallenges, useChallengeSubmissions } from "@/shared/hooks/use-data"
+import { mockService } from "@/shared/utils/mock-service"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
+import { Badge } from "@/shared/ui/badge"
+import { Input } from "@/shared/ui/input"
+import { Textarea } from "@/shared/ui/textarea"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/shared/ui/dialog"
 import { Plus, Camera, Trophy, Users, Check, X } from "lucide-react"
-import type { Challenge, ChallengeSubmission } from "@/lib/types"
+import type { Challenge, ChallengeSubmission } from "@/shared/config/types"
 
 export default function ChallengesAdminPage() {
   const { challenges, mutate: mutateChallenges } = useChallenges()
